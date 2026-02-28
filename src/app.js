@@ -1,12 +1,20 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 
+app.get("/test", (req,res) => {
+    res.send({
+        first_name : "Priya",
+        last_name  : "Sharma"
+    })}
+);
 
-app.use((req, res) => {
-    res.send("Hello rom the server.");
-});
+app.post("/test", (req,res) => {
+    res.send("DB Is saved succesfully")} 
+);
+
+
 
 app.listen(3000, () => {
-    console.log("Server is running")}  // will only be called once my server is up and running.
-);
+    console.log("Server is active");
+});
