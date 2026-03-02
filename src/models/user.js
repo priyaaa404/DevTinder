@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     firstName : {
         type : String , 
         required : true ,
@@ -38,8 +38,21 @@ const userSchema = mongoose.Schema({
     gender  : {
         type : String ,
         // required : true ,
+        trim : true ,
+        enum : {
+            values : ["male", "female", "others"],
+            message : `{VALUE} is incorrect data type`
+        }
+    },
+    photoUrl : {
+        type : String ,
+        trim : true 
+    },
+    about : {
+        type : String ,
         trim : true 
     }
+    
 },
 {
     timestamps : true
