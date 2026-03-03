@@ -7,7 +7,6 @@ try{
 const {token} = req.cookies;
 if(!token){
     throw new Error("Invalid token");
-
 }
 
 const decodedUser = await jwt.verify(token, "Devtinderhollaback");

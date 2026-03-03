@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
         trim : true ,
         enum : {
             values : ["male", "female", "others"],
-            message : `{VALUE} is incorrect data type`
+            message : `{VALUE} is incorrect gender type`
         }
     },
     photoUrl : {
