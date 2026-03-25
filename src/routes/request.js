@@ -4,7 +4,6 @@ const ConnectionRequest = require("../models/connectionRequest.js")
 const requestRouter = express.Router();
 const User = require("../models/user.js");
 
-
 requestRouter.post("/request/send/:status/:toUserId", 
     userAuth , 
      async (req,res) => {
@@ -20,7 +19,6 @@ requestRouter.post("/request/send/:status/:toUserId",
             .status(400)
             .json({ message : "Invalid status type : " + status})
         }
-
 
         // id there's an existing connectionrequest
         const existingConnectionRequest = await ConnectionRequest.findOne({
@@ -46,7 +44,6 @@ requestRouter.post("/request/send/:status/:toUserId",
         // what if someone sends request to himself???
         // pre middleware written in connectionRequest schema, anything i save in this b will go through this middleware
 
-
         const connectionRequest = new ConnectionRequest(
             {
                 fromUserId, 
@@ -66,40 +63,41 @@ requestRouter.post("/request/send/:status/:toUserId",
     }
 })
 
-// requestRouter.post(
-//     "/request/review/:status/:toRequestId", 
-//     userAuth , 
-//      async (req,res) => {
-//     try{
-//         const loggedInUser = req.user;
-//         const {requestId ,status} = req.params;
+requestRouter.post("/request/review/:status/:requestId", 
+    userAuth , 
+     async (req,res) => {
+    try{
+        const loggedInUser = req.user;
+        const {requestId ,status} = req.params;
+        
+        // validate status/.
+        const allowedStatus = [ "accepted" , "rejected" ];
+        if(!allowedStatus.includes(status)){
+            return res
+            .status(400)
+            .json({message : "Status not allowed"   })
+        }
 
-//         const allowedstatus = ["accepted" , "rejected"];
-//         if(!allowedstatus.includes(status)){
-//             return res
-//             .status(400)
-//             .json({message : "Status not allowed"   })
-//         }
+        //requestid should exist in db and the loggedinuser === toUserId and   //  status === interested
+        const connectionRequest = await ConnectionRequest.findOne({
+            _id : requestId,
+            toUserId : loggedInUser._id,
+            status : "interested" , 
+        });
+        if(!connectionRequest){
+            return res
+            .status(400)
+            .json({message : "Connection Request Nott found"   })
+        }
+       
+        connectionRequest.status = status;      
+        const data = await connectionRequest.save();
+        res.json({message : "Connection request " + status  +  " "  + data})  ;  
 
-//         const connectionRequest = await ConnectionRequestModel.findOne({
-//             _id : requestId,
-//             toUserId : loggedInUser._id,
-//             status : "interested" , 
-//         });
-//         if(!connectionRequest){
-//             return res
-//             .status(400)
-//             .json({message : "Connection Request Not found"   })
-//         }
-
-//         connectionRequest.status = status;
-//         const data = await connectionRequest.save();
-//         res.json({message : "Connection request" + status , data})  ;  
-
-//     } catch (err){
-//         res.status(400).send("ERROR" + err.message);
-//     }
-// })
+    } catch (err){
+        res.status(400).send("ERROR" + err.message);
+    }
+})
 
 
 module.exports = { requestRouter };
