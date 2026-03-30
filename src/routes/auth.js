@@ -2,8 +2,7 @@ const express = require("express");
 const authRouter = express.Router();
 const {validateSignUpData} = require("../utils/validation");
 const User = require("../models/user.js");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+
 
 authRouter.post("/login", async (req,res) => {
     try{
@@ -14,16 +13,16 @@ authRouter.post("/login", async (req,res) => {
             throw new Error("Invalid credentials");
         }
 
-        const isPasswordValid = await bcrypt.compare(password,user.password);
+        const isPasswordValid = await user.validatePassword(password);
         if(isPasswordValid){
 
             // make a jwt token
-            const token = await jwt.sign({_id : user._id}, process.env.JWT_SECRETKEY, {expiresIn: "1d"});
+            const token = await user.getJWT();
             console.log(token);
             // send the jwt token as cookie back to user 
  
             res.cookie("token", token , {
-                expires : new Date(Date.now() + 3600000)
+                expires : new Date(Date.now() + 8 * 3600000)
             });
             res.send(user);
         } else {
@@ -59,8 +58,6 @@ authRouter.post("/signUp", async (req,res) => {
                 expires : new Date(Date.now() + 8 * 3600000)
             });
 
-
-
         res.json({ message : "user added succesfully" , data : savedUser});
 
     } catch (err){
@@ -73,7 +70,7 @@ authRouter.post("/logout", async (req,res) => {
         res.cookie("token" , null, {
             expires : new Date(Date.now())
         });
-        res.send("User logges out");
+        res.send("User logged out");
 
 })
 

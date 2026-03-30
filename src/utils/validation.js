@@ -27,3 +27,4 @@ const validateEditProfileData = (req) =>{
 
 module.exports = {  validateSignUpData , validateEditProfileData };
 
+ 

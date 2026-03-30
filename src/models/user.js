@@ -8,16 +8,17 @@ const userSchema = new mongoose.Schema({
         type : String , 
         required : true ,
         trim : true ,
-        minLength : 2
+        minLength : 2,
+        maxLength: 50
     }, 
     lastName  : {
         type : String ,
-        required : true ,
         trim : true ,
         minLength : 2
     }, 
     emailId : {
         type : String ,
+        lowercase: true,
         required : true ,
         unique : true,
         trim : true ,
@@ -35,6 +36,7 @@ const userSchema = new mongoose.Schema({
     age  : {
         type : Number ,
         trim : true ,
+        min : 18,
     
     },
     gender  : {
@@ -52,7 +54,11 @@ const userSchema = new mongoose.Schema({
     },
     about : {
         type : String ,
-        trim : true 
+        trim : true ,
+        default: "This is a default about of the user!",
+    },
+    skills : {
+         type: [String],
     }
     
 },
@@ -62,7 +68,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.getJWT = async function () {
   const user = this;
-
   const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRETKEY , {
     expiresIn: "7d",
   });
