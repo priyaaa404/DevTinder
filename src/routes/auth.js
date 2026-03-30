@@ -18,7 +18,7 @@ authRouter.post("/login", async (req,res) => {
         if(isPasswordValid){
 
             // make a jwt token
-            const token = await jwt.sign({_id : user._id}, "Devtinderhollaback", {expiresIn: "1d"});
+            const token = await jwt.sign({_id : user._id}, process.env.JWT_SECRETKEY, {expiresIn: "1d"});
             console.log(token);
             // send the jwt token as cookie back to user 
  

@@ -3,6 +3,9 @@ const connectDB = require("./config/database.js");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
+// const dns = require("dns");
+// dns.setServers(["1.1.1.1", "8.8.8.8"]);
+// import dns from 'dns';
 
 const app = express();
 
@@ -32,7 +35,7 @@ connectDB()
     });
 })
 .catch((err) => {
-        console.error("db failed");
+        console.error("db failed" , err);
 });
 
 
