@@ -4,8 +4,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 
-const dns = require("dns");
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+// const dns = require("dns");
+// dns.setServers(["1.1.1.1", "8.8.8.8"]);
 // import dns from 'dns';
 
 const app = express();
