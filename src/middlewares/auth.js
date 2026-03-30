@@ -8,7 +8,7 @@ if(!token){
     return res.status(401).send("Please Login");
 }
 
-const decodedUser = await jwt.verify(token, "Devtinderhollaback");
+const decodedUser = await jwt.verify(token, process.env.JWT_SECRETKEY);
 
 const {_id} = decodedUser;
 const user = await User.findById(_id);
