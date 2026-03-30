@@ -22,6 +22,13 @@ authRouter.post("/login", async (req,res) => {
             // send the jwt token as cookie back to user 
  
             res.cookie("token", token , {
+            httpOnly: true,                 // prevents client JS access
+            secure: true,                   // required for HTTPS
+            sameSite: "none",               // allows cross-site cookies
+            maxAge: 8 * 60 * 60 * 1000      // 8 hours
+
+            
+            }   , {
                 expires : new Date(Date.now() + 8 * 3600000)
             });
             res.send(user);
